@@ -8,6 +8,7 @@ var resolve = require('path').resolve
   , join = require('path').join
   , program = require('commander')
   , connect = require('connect')
+  , build = require('./../lib/build')
   , stylus = require('stylus')
   , jade = require('jade')
   , less = require('less-middleware')
@@ -30,6 +31,7 @@ program
   .option('-D, --no-dirs', 'disable directory serving')
   .option('-f, --favicon <path>', 'serve the given favicon')
   .option('-C, --cors', 'allows cross origin access serving')
+  .option('-b, --build', 'build component')
   .parse(process.argv);
 
 // path
@@ -37,6 +39,8 @@ var path = resolve(program.args.shift() || '.');
 
 // setup the server
 var server = connect();
+
+if (program.build) server.use(build);
 
 // ignore favicon
 server.use(connect.favicon(program.favicon));
